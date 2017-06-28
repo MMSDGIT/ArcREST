@@ -336,13 +336,10 @@ class featureservicetools(securityhandlerhelper):
                 if returnURLOnly:
                     return item.url
                 else:
-                    fs = arcrest.agol.FeatureService(
-                       url=item.url,
-                       securityHandler=self._securityHandler)
-                    if fs.layers is None or len(fs.layers) == 0 :
-                        fs = arcrest.ags.FeatureService(
-                           url=item.url)
-                    return fs
+                    if hasattr(self._securityHandler, 'is_portal'):
+                        if self._securityHandler.is_portal:
+                            return arcrest.ags.FeatureService(url=item.url)
+                    return arcrest.agol.FeatureService(url=item.url,securityHandler=self._securityHandler)
             return None
 
         except:
